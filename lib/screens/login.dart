@@ -1,8 +1,8 @@
 import 'package:mental_health_tracker/screens/menu.dart';
-import 'package:mental_health_tracker/screens/register.dart'; // Import halaman RegisterPage
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:mental_health_tracker/screens/register.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -98,14 +98,15 @@ class _LoginPageState extends State<LoginPage> {
                       String username = _usernameController.text;
                       String password = _passwordController.text;
 
-                      // Ganti URL ini dengan URL server Django kamu
-                      final response = await request.login(
-                        "http://10.0.2.2:8000/auth/login/", // Ganti URL sesuai dengan server kamu
-                        {
-                          'username': username,
-                          'password': password,
-                        },
-                      );
+                      // Cek kredensial
+                      // Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                      // Untuk menyambungkan Android emulator dengan Django pada localhost,
+                      // gunakan URL http://10.0.2.2/
+                      final response = await request
+                          .login("http://localhost:8000/auth/login/", {
+                        'username': username,
+                        'password': password,
+                      });
 
                       if (request.loggedIn) {
                         String message = response['message'];
@@ -120,8 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                             ..hideCurrentSnackBar()
                             ..showSnackBar(
                               SnackBar(
-                                  content: Text(
-                                      "$message Selamat datang, $uname.")),
+                                  content:
+                                      Text("$message Selamat datang, $uname.")),
                             );
                         }
                       } else {
